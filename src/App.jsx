@@ -1,35 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Container, Button, Select, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { useState } from 'react';
+
+const productosMock = [
+  { nombre: "Producto 1", precio: 1000 },
+  { nombre: "Producto 2", precio: 2000 },
+  { nombre: "Producto 3", precio: 3000 }
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tienda, setTienda] = useState('');
+  const [productos, setProductos] = useState([]);
+
+  const consultarProductos = () => {
+    setProductos(productosMock);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Container sx={{ mt: 4 }}>
+      <Select
+        value={tienda}
+        displayEmpty
+        onChange={(e) => setTienda(e.target.value)}
+        sx={{ mb: 2, width: 300 }}
+      >
+        <MenuItem value="" disabled>Selecciona una tienda</MenuItem>
+        <MenuItem value="exito">Éxito</MenuItem>
+        <MenuItem value="homecenter">Homecenter</MenuItem>
+        <MenuItem value="falabella">Falabella</MenuItem>
+      </Select>
+
+      <Button variant="contained" onClick={consultarProductos} sx={{ ml: 2 }}>
+        Consultar
+      </Button>
+
+      {productos.length > 0 && (
+        <TableContainer component={Paper} sx={{ mt: 4 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Precio (COP)</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {productos.map((producto, idx) => (
+                <TableRow key={idx}>
+                  <TableCell>{producto.nombre}</TableCell>
+                  <TableCell>{producto.precio.toLocaleString()}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Container>
+  );
 }
 
-export default App
+export default App;
